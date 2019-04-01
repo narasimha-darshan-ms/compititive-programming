@@ -182,17 +182,17 @@ void BPTree::insert(int x)
             
             Node* newLeaf = new Node;
            
-            int virtualNode[MAX+1];     
-            for(int i = 0; i < MAX; i++){   virtualNode[i] = cursor->key[i];    }
+            int tempNode[MAX+1];     
+            for(int i = 0; i < MAX; i++){   tempNode[i] = cursor->key[i];    }
             
             int i = 0, j;
-            while(x > virtualNode[i] && i < MAX) i++;
+            while(x > tempNode[i] && i < MAX) i++;
           
             for(int j = MAX+1;j > i; j--)
             {
-                virtualNode[j] = virtualNode[j-1];
+                tempNode[j] = tempNode[j-1];
             }
-            virtualNode[i] = x; 
+            tempNode[i] = x; 
             newLeaf->IS_LEAF = true;
            
             cursor->size = (MAX+1)/2;
@@ -205,11 +205,11 @@ void BPTree::insert(int x)
            
             for(i = 0; i < cursor->size; i++)
             {
-                cursor->key[i] = virtualNode[i];
+                cursor->key[i] = tempNode[i];
             }
             for(i = 0, j = cursor->size; i < newLeaf->size; i++, j++)
             {
-                newLeaf->key[i] = virtualNode[j];
+                newLeaf->key[i] = tempNode[j];
             }
           
             if(cursor == root)
