@@ -248,30 +248,30 @@ void BPTree::insertInternal(int x, Node* cursor, Node* child)
     {
         Node* newInternal = new Node;
         
-        int virtualKey[MAX+1];
-        Node* virtualPtr[MAX+2];
+        int tempKey[MAX+1];
+        Node* tempPtr[MAX+2];
         for(int i = 0; i < MAX; i++)
         {
-            virtualKey[i] = cursor->key[i];
+            tempKey[i] = cursor->key[i];
         }
         for(int i = 0; i < MAX+1; i++)
         {
-            virtualPtr[i] = cursor->ptr[i];
+            tempPtr[i] = cursor->ptr[i];
         }
         int i = 0, j;
-        while(x > virtualKey[i] && i < MAX) i++;
+        while(x > tempKey[i] && i < MAX) i++;
         
         for(int j = MAX+1;j > i; j--)
         {
-            virtualKey[j] = virtualKey[j-1];
+            tempKey[j] = tempKey[j-1];
         }
-        virtualKey[i] = x; 
+        tempKey[i] = x; 
         
         for(int j = MAX+2;j > i+1; j--)
         {
-            virtualPtr[j] = virtualPtr[j-1];
+            tempPtr[j] = tempPtr[j-1];
         }
-        virtualPtr[i+1] = child; 
+        tempPtr[i+1] = child; 
         newInternal->IS_LEAF = false;
         
         cursor->size = (MAX+1)/2;
@@ -279,11 +279,11 @@ void BPTree::insertInternal(int x, Node* cursor, Node* child)
    
         for(i = 0, j = cursor->size+1; i < newInternal->size; i++, j++)
         {
-            newInternal->key[i] = virtualKey[j];
+            newInternal->key[i] = tempKey[j];
         }
         for(i = 0, j = cursor->size+1; i < newInternal->size+1; i++, j++)
         {
-            newInternal->ptr[i] = virtualPtr[j];
+            newInternal->ptr[i] = tempPtr[j];
         }
        
         if(cursor == root)
@@ -675,7 +675,4 @@ void BPTree::cleanUp(Node* cursor)
     }
 }
 
-BPTree::~BPTree()
-{
-    if(root)    cleanUp(root);
-}
+BPTree::~BPTree(){  if(root)    cleanUp(root);  }
