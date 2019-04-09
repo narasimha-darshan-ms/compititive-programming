@@ -1,3 +1,26 @@
+/*
+Bombs are arranged in the form of a matrix. The bomb is detonated at some point, the effect of the bomb blast will detonate the 
+neighbouring bomb(not diagonally) as well. bomb blast will last for 1 second. How long will it take to blast all the bomb in the matrix
+
+
+Ex:
+size of the matrix: 4 4
+the first point of detonation: 2 2
+
+0 0 0 0 
+0 0 0 0 
+0 0 1 0 
+0 0 0 0 
+
+time required by the bombs to detonate:
+5 4 3 4 
+4 3 2 3 
+3 2 1 2 
+4 3 2 3 
+
+answer: 5  
+*/
+
 #include <iostream>
 #include <list>
 #include <utility>
