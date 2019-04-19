@@ -46,3 +46,19 @@ int main(){
     
     return 0;
 }
+
+/*
+SOLUTION FOR LEETCODE PLATFORM :
+class Solution {
+public:
+    int minCostClimbingStairs(vector<int>& cost) {
+        int minCost[cost.size()];
+        minCost[0] = minCost[1] = 0;
+        int n = cost.size();
+        for(int i = 2 ; i < cost.size() ; i++){
+            minCost[i] = std::min(cost[i-1] + minCost[i-1] , cost[i-2] + minCost[i-2]); 
+        }
+        return std::min(minCost[n-1] + cost[n-1], minCost[n-2] + cost[n-2]);
+    }
+};
+*/
