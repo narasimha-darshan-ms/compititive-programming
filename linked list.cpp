@@ -8,17 +8,17 @@ struct LinkedList{
 struct LinkedList* CreateLinkedList(){
     struct LinkedList *temp=0;
     temp=(struct LinkedList*)malloc(sizeof(struct LinkedList));
-    if(!temp){  /*cout<<"Failed to create LinkedList\n";*/ return 0;    }
-    else{    temp->next=0;return temp;   } 
+    if(!temp){   return 0;    }
+    else{    temp->next=0; return temp;   } 
 }
 void InsertData(int d,struct LinkedList* temp){
-    //struct LinkedList* prev=temp;
-    while(temp->next!=0){    temp=temp->next;    }
-    temp->next=(struct LinkedList*)malloc(sizeof(struct LinkedList));
-    temp=temp->next;
-    temp->next=0; temp->data=d;
+    while(temp->next != 0){    temp=temp->next;    }
+    temp->next = (struct LinkedList*)malloc(sizeof(struct LinkedList));
+    temp = temp->next;
+    temp->next = 0;
+    temp->data = d;
 }
-void InsertAtHead(int d,struct LinkedList* head){
+struct LinkedList* InsertAtHead(int d,struct LinkedList* head){
     struct LinkedList *temp=(struct LinkedList*)malloc(sizeof(struct LinkedList));
     temp->next=head;
     head=temp;
@@ -45,12 +45,25 @@ int main(){
     while(option){
         
         switch(option){
-            case 1: head=CreateLinkedList();break;
-            case 2:cin>>d;InsertData(d,head);break;
-            case 3:cin>>d;InsertAtHead(d,head);break;
-            case 4:cin>>d;SearchInLinkedList(d,head);break;
-            case 5:DeleteLinkedList(head);break;
-            case 6:printElement(head);
+            case 1: head=CreateLinkedList();
+                    break;
+
+            case 2: cin>>d;
+                    InsertData(d,head);
+                    break;
+                    
+            case 3: cin>>d;
+                    head = InsertAtHead(d,head);
+                    break;
+            
+            case 4: cin>>d;
+                    SearchInLinkedList(d,head);
+                    break;
+            
+            case 5: DeleteLinkedList(head);
+                    break;
+            
+            case 6: printElement(head);
         }
         cin>>option;
     }
