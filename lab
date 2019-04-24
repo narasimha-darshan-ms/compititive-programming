@@ -87,3 +87,7 @@ Download linux-4.9.11.tar.xz (compressed kernel source file)
 • make –j 2 all
 • qemu-system-arm –M vexpress-a9 –dtb ./dts/vexpress-v2p-ca9.dtb –kernel
 zImage –append “console=ttyAMA0” -nographic
+arm-linux-gnueabihf-gcc -static hello.c -o hello.o
+echo hello | cpio -o -- format=newc>initramfs
+cpio -t<initramfs
+qemu-system-arm -M vexpress-a9 -dtb ./dts/vexpress-v2p-ca9.dtb -Kernel zImage -initrd initramfs -append "rdinit=/hello console=ttyAMA0" -nographic
