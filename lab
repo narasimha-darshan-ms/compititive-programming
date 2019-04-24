@@ -1,0 +1,87 @@
+sudo apt-get update
+sudo apt-get install qemu-system
+sudo apt-get install gcc-arm-linux-gnueabi
+
+hello.c:
+volatile unsigned int * const UART0DR = (unsigned int *)0x101f1000;
+void print_uart0(const char *s) {
+while(*s != '\0') { /* Loop until end of string */
+*UART0DR = (unsigned int)(*s); /* Transmit char */
+s++; /* Next char */
+}
+}
+void c_entry() {
+print_uart0("Hello world!\n");
+}
+
+startup.s:
+.global _Reset
+_Reset:
+LDR sp, =stack_top
+BL c_entry
+B .
+
+Linker.ld:
+ENTRY(_Reset)
+SECTIONS
+{
+. = 0x10000;
+.startup . : { startup.o(.text) }
+.text : { *(.text) }
+.data : { *(.data) }
+.bss : { *(.bss COMMON) }
+. = ALIGN(8);
+. = . + 0x1000; /* 4kB of stack memory */
+stack_top = .;
+}
+
+arm-linux-gnueabi-gcc –c –nostdlib –mcpu=arm926ej-s hello.c –o hello.o
+arm-linux-gnueabi-as –mcpu=arm926ej-s –g startup.s –o startup.o
+arm-linux-gnueabi-ld –T linker.ld startup.o hello.o –o hello.elf
+arm-linux-gnueabi-objcopy –O binary hello.elf hello.bin
+qemu-system-arm –M versatilepb –kernel hello.bin -nographic
+
+Create the hello.c file with UART address 0x10009000, write the linker script file
+with entry point 0x60010000
+• Create the hello.c file and compile, assemble and link it and generate the hello.bin
+file:
+• arm-linux-gnueabihf-gcc –c –mcpu=cortex-a9 hello.c –o hello.o
+• arm-linux-gnueabihf-as –mcpu=cortex-a9 startup.s –o startup.o
+• arm-linux-gnueabihf-ld –T linker.ld startup.o hello.o –o hello.elf
+• arm-linux-gnueabihf-objcopy –O binary hello.elf hello.bin
+• Run and emulate to get the hello world output:
+• qemu-system-arm –M vexpress-a9 –nographic –m 1024M -Kernel hello.bin
+
+Uboot
+Uncompress the uboot file using tar command
+• Edit the configuration file versatile.h in the uncompressed uboot folder
+• Change the entry point in the linker file
+• Cross-compile the application in a similar manner to the previous experiment and generate
+the hello.bin file
+• Go inside the uncompressed u-boot folder and configure the source code for the uboot
+using the following command
+
+make versatileqemu_config ARCH=arm CROSS_COMPILE=arm-linux-gnueabi-
+and now create the bootloader for the hardware:
+
+make all ARCH=arm CROSS_COMPILE=arm-linux-gnueabi-
+
+• mkimage –C none –A arm –O linux –T kernel –d hello.bin –a 0x00100000 –e
+0x00100000 hello.uimg
+• cat u-boot.bin hello.uimg>flash.bin
+• qemu-system-arm –M versatilepb –nographic –kernel flash.bin
+• In order to run the application, find the hex address of hello.uimg and give it as an
+argument to the bootm command in the versatilepb prompt
+
+Linux kernel
+Download linux-4.9.11.tar.xz (compressed kernel source file)
+• Uncompress the kernel source file
+• make clean
+• make distclean
+• export ARCH=arm
+• export CROSS_COMPILE
+• make vexpress_defconfig
+• make menuconfig
+• make –j 2 all
+• qemu-system-arm –M vexpress-a9 –dtb ./dts/vexpress-v2p-ca9.dtb –kernel
+zImage –append “console=ttyAMA0” -nographic
