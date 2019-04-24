@@ -69,7 +69,9 @@ make all ARCH=arm CROSS_COMPILE=arm-linux-gnueabi-
 • mkimage –C none –A arm –O linux –T kernel –d hello.bin –a 0x00100000 –e
 0x00100000 hello.uimg
 • cat u-boot.bin hello.uimg>flash.bin
+printf "bootm 0x%X\n" $(expr $(stat -c%s u-boot.bin)+65536)
 • qemu-system-arm –M versatilepb –nographic –kernel flash.bin
+bootm [---address---]
 • In order to run the application, find the hex address of hello.uimg and give it as an
 argument to the bootm command in the versatilepb prompt
 
