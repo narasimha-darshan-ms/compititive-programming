@@ -1,4 +1,5 @@
 /*
+
 Bombs are arranged in the form of a matrix. The bomb is detonated at some point, the effect of the bomb blast will detonate the 
 neighbouring bomb(not diagonally) as well. bomb blast will last for 1 second. How long will it take to blast all the bomb in the matrix
 
