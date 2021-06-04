@@ -8,6 +8,7 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
+//Given two inputs will not be in reversed order
 class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {   
